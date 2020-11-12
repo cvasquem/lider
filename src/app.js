@@ -1,18 +1,40 @@
 const express = require("express");
 const path = require("path");
 const morgan = require("morgan");
+//const MongoClient = require('mongodb').MongoClient;
 const mongoose = require("mongoose");
 
 const app = express();
 
 //conexion BBDD
-mongoose
-  .connect(
-    "mongodb+srv://cvasquem:21octubre@cluster0.egsok.mongodb.net/walmart?retryWrites=true&w=majority",
-    { useUnifiedTopology: true, useNewUrlParser: true }
-  )
-  .then((db) => console.log("db connected "))
-  .catch((err) => console.log(err));
+
+
+/*
+const uri = "mongodb+srv://cvasquem:21octubre@cluster0.egsok.mongodb.net/walmart?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true  });
+client.connect(err => {
+  const collection = client.db("walmart").collection("products");
+  // perform actions on the collection object
+  console.log('esta es la base:')
+  console.log(collection.find());
+  client.close();
+});
+*/
+
+
+try{
+  mongoose.connect(
+      "mongodb+srv://cvasquem:21octubre@cluster0.egsok.mongodb.net/walmart?retryWrites=true&w=majority",
+      { useUnifiedTopology: true, useNewUrlParser: true }
+    )
+    .then((db) => console.log("db connected "))
+    .catch((err) => console.log(err));
+}
+catch(e){
+  console.error(e);
+}
+
+
 
 // importando rutas
 const indexRoutes = require("./routes/index");

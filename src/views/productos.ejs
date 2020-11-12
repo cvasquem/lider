@@ -1,0 +1,17 @@
+
+
+  <%- include('partials/_header'); %>
+    <!-- Container here -->
+    <div class="container">
+      listado de productos:
+      <div class="row">
+        <% productos.forEach(function(producto){ %>
+          <div class="container">
+            <%= producto.brand %>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+
+
+  <%- include('partials/_footer'); %>

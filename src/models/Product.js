@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const TaskSchema = new Schema({
+const ProductSchema = new Schema({
   id: Number,
   brand: String,
   description: String,
   image: String,
-  price: Number,
+  price: Number
 });
 
-module.exports = mongoose.model("tasks", TaskSchema);
+module.exports = mongoose.model("Product", ProductSchema);
