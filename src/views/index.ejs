@@ -5,19 +5,68 @@
 
     <div class="container">
       <h1>Productos LIDER</h1>
-      <div class="card-columns">
+
+      <!-- listado de productos -->
+      <div class="row p-5">
           <% productosIndex.forEach(function(producto){ %>
-            <!-- style="width: 18rem;" -->
-          <div class="card p-4 mx-auto" >
-              <img src="https://<%= producto.image %>" class="card-img-top" alt="..." width="120" height="120">
-              <div class="card-block">
-                <h5 class="card-title"><%= producto.brand %></h5>
-                <p class="card-text"><%= producto.description %></p>
-                <a href="#" class="btn btn-primary">$<%= producto.price %></a>
+          <div class="col-md-4">
+                <!-- style="width: 18rem;" -->
+              <div class="card p-4 mx-auto" >
+                  <img src="https://<%= producto.image %>" class="card-img-top" alt="..." width="120" height="120">
+                  <div class="card-body">
+                    <h5 class="card-title"><%= producto.brand %></h5>
+                    <p class="card-text"><%= producto.description %></p>
+                    <a href="#" class="btn btn-primary">$<%= producto.price %></a>
+                  </div>
               </div>
           </div>
           <% }) %>
       </div>
+
+      <!-- pagination -->
+      <div class="row">
+        <% if(pages) { %>
+          <nav class="mx-auto">
+            <ul class="pagination">
+
+              <!-- primera pagina -->
+              <% if(current ==1) { %>
+                <li class="page-item"><a class="page-link disabled" href="#">Primera página</a></li>
+              <% } else { %>
+                <li class="page-item"><a class="page-link" href="/1">Primera página</a></li>
+              <% } %>
+
+
+              <!-- paginas -->
+              <% var i = Number(current) > 5 ? Number(current) - 4 : 1 %>
+              <% if(i !== 1) { %>
+                <a class="page-link" href="#">...</a>
+              <% } %>
+              <% for (; i < (Number(current) + 4) && i <= pages ; i++){ %>
+                <% if(i == current) { %>
+                  <li class="page-item"><a class="page-link" href="/<%= i %>"><%= i %></a></li>
+                <% }else{ %>
+                  <li class="page-item"><a class="page-link" href="/<%= i %>"><%= i %></a></li>
+                <% } %>
+
+              <% } %>
+              <% if(i == Number(current) + 4 && i < pages) { %>
+                  <li class="page-item"><a class="page-link" href="#">...</a></li>
+              <% } %>
+
+              <!-- ultima pagina -->
+              <% if(current == pages) { %>
+                <li class="page-item"><a class="page-link disabled" href="#">Última página</a></li>
+                <% } else { %>
+                  <li class="page-item"><a class="page-link" href="/<%= pages %>">Última página</a></li>
+              <% } %>
+            </ul>
+          </nav>
+        <% } %>
+      </div>
+      <!-- pagination -->
+
+      
     </div>
 
 

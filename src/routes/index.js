@@ -4,8 +4,23 @@ const router = express.Router();
 const Product = require('../models/Product');
 
 router.get("/", async (req, res) => {
-  const productosIndex = await Product.find();
-  res.render("index", {productosIndex});
+  let perPage = 9;
+  let page = req.params.page || 1;
+  const productosIndex = await Product
+    .find({})
+    .skip((perPage * page ) - perPage)
+    .limit(perPage)
+    .exec((err, productosIndex) => {
+      Product.countDocuments((err, count) => {
+        if(err) return next(err);
+        res.render("index", {
+          productosIndex,
+          current: page,
+          pages: Math.ceil(count/perPage)
+        })
+      })
+    })
+
 });
 
 
@@ -23,9 +38,13 @@ router.get("/:page", (req, res, next) => {
     .skip((perPage * page ) - perPage)
     .limit(perPage)
     .exec((err, productosIndex) => {
-      Product.count((err, count) => {
+      Product.countDocuments((err, count) => {
         if(err) return next(err);
-        res.render("index", {productosIndex, current: page, pages: Math.ceil(count/perPage)})
+        res.render("index", {
+          productosIndex,
+          current: page,
+          pages: Math.ceil(count/perPage)
+        })
       })
     })
 });
