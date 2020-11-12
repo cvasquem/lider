@@ -2,7 +2,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>que pazaaaaa</title>
+    <title>Desafío Walmart</title>
     <!-- bootstrap 4 cdn-->
     <link
       rel="stylesheet"
@@ -19,15 +19,8 @@
         width="150"
         height="70"
       />
-      <form class="form-inline">
-        <input
-          class="form-control mr-sm-2"
-          type="search"
-          placeholder="Search"
-          aria-label="Search"
-        />
-        <button class="btn btn-success my-2 my-sm-0" type="submit">
-          Search
-        </button>
+      <form class="form-inline" action="/" method="GET">
+        <input class="form-control mr-sm-2" type="search" name="buscar" placeholder="Search" value="<%= buscar %>"/>
+        <button class="btn btn-success my-2 my-sm-0" type="submit">Search</button>
       </form>
     </nav>

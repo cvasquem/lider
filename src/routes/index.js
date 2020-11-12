@@ -3,23 +3,48 @@ const router = express.Router();
 
 const Product = require('../models/Product');
 
-router.get("/", async (req, res) => {
-  let perPage = 9;
-  let page = req.params.page || 1;
-  const productosIndex = await Product
-    .find({})
-    .skip((perPage * page ) - perPage)
-    .limit(perPage)
-    .exec((err, productosIndex) => {
-      Product.countDocuments((err, count) => {
-        if(err) return next(err);
-        res.render("index", {
-          productosIndex,
-          current: page,
-          pages: Math.ceil(count/perPage)
+router.get("/", async (req, res, next) => {
+
+  if(req.query.buscar){
+    let perPage = 9;
+    let page = req.params.page || 1;
+    const productosIndex = await Product
+      .find({brand:{$regex:'.*'+ req.query.buscar + '.*'}})
+      .skip((perPage * page ) - perPage)
+      .limit(perPage)
+      .exec((err, productosIndex) => {
+        Product.countDocuments((err, count) => {
+          if(err) return next(err);
+          res.render("index", {
+            productosIndex,
+            current: page,
+            pages: Math.ceil(count/perPage),
+            buscar: req.query.buscar
+          })
         })
       })
-    })
+  }
+  else{
+    let perPage = 9;
+    let page = req.params.page || 1;
+    const productosIndex = await Product
+      .find({})
+      .skip((perPage * page ) - perPage)
+      .limit(perPage)
+      .exec((err, productosIndex) => {
+        Product.countDocuments((err, count) => {
+          if(err) return next(err);
+          res.render("index", {
+            productosIndex,
+            current: page,
+            pages: Math.ceil(count/perPage),
+            buscar: ''
+          })
+        })
+      })
+  }
+
+
 
 });
 
@@ -30,23 +55,49 @@ router.get("/productos", async (req, res) => {
 });
 
 router.get("/:page", (req, res, next) => {
-  let perPage = 9;
-  let page = req.params.page || 1;
 
-  Product
-    .find({})
-    .skip((perPage * page ) - perPage)
-    .limit(perPage)
-    .exec((err, productosIndex) => {
-      Product.countDocuments((err, count) => {
-        if(err) return next(err);
-        res.render("index", {
-          productosIndex,
-          current: page,
-          pages: Math.ceil(count/perPage)
+  if(req.query.buscar){
+    let perPage = 9;
+    let page = req.params.page || 1;
+    Product
+      .find({brand:{$regex:'.*'+ req.query.buscar + '.*'}})
+      .skip((perPage * page ) - perPage)
+      .limit(perPage)
+      .exec((err, productosIndex) => {
+        Product.countDocuments((err, count) => {
+          if(err) return next(err);
+          res.render("index", {
+            productosIndex,
+            current: page,
+            pages: Math.ceil(count/perPage),
+            buscar: req.query.buscar
+          })
         })
       })
-    })
+  }
+  else{
+    let perPage = 9;
+    let page = req.params.page || 1;
+    Product
+      .find({})
+      .skip((perPage * page ) - perPage)
+      .limit(perPage)
+      .exec((err, productosIndex) => {
+        Product.countDocuments((err, count) => {
+          if(err) return next(err);
+          res.render("index", {
+            productosIndex,
+            current: page,
+            pages: Math.ceil(count/perPage),
+            buscar: ''
+          })
+        })
+      })
+  }
+
+
+
+
 });
 
 
