@@ -6,69 +6,60 @@ const Product = require('../models/Product');
 router.get("/", async (req, res, next) => {
 
   if(req.query.buscar){
-    var condition = {};
-    const palindromo = isPalindromo(req.query.buscar);
-    console.log('checking: ' + req.query.buscar + ':' + palindromo);
 
     const palabra = req.query.buscar;
     console.log(Number(palabra));
 
-
-
+    var condition = {};
     if(isNaN(Number(palabra))){
-      condition = {$or:[ {'brand':{$regex:'.*'+ req.query.buscar + '.*'}}, {'description':{$regex:'.*'+ req.query.buscar + '.*'}} ]};
+      condition = {$or:[ {'brand':{$regex:'.*'+ palabra + '.*'}}, {'description':{$regex:'.*'+ palabra + '.*'}} ]};
     }
     else{
-      condition = {'id':req.query.buscar};
+      condition = {'id':palabra};
     }
 
+    const palindromo = isPalindromo(req.query.buscar);
+    console.log('checking: ' + req.query.buscar + '= ' + palindromo);
 
 
     let perPage = 9;
     let page = req.params.page || 1;
-
-    const totalproductos = await Product.countDocuments((err, count) => {
-        if(err) return next(err);
-    });
-    console.log("total productos: " + totalproductos);
-
     const result = await Product
       .find(condition)
-      //.find({$or:[ { 'id':{$eq: parseInt(palabra,10)}} , {'brand':{$regex:'.*'+ palabra + '.*'}}, {'description':{$regex:'.*'+ palabra + '.*'}} ]})
-      //.find({$or:[  {"description":{$regex:'.*'+ req.query.buscar + '.*'}} ]})
       .skip((perPage * page ) - perPage)
-      //.limit(perPage)
+      .limit(perPage)
       .exec((err, productosIndex) => {
-
           if(err) return next(err);
-          res.render("index", {
-            productosIndex,
-            current: page,
-            pages: Math.ceil(totalproductos/perPage),
-            buscar: req.query.buscar,
-            isPalindrome: palindromo
+          Product.countDocuments((err, count) => {
+              res.render("index", {
+                productosIndex,
+                current: page,
+                pages: Math.ceil(count/perPage),
+                buscar: palabra,
+                isPalindrome: palindromo
+              })
           })
         });
   }
   else{
     let perPage = 9;
     let page = req.params.page || 1;
-    const productosIndex = await Product
+    const result = await Product
       .find({})
       .skip((perPage * page ) - perPage)
       .limit(perPage)
       .exec((err, productosIndex) => {
-        Product.countDocuments((err, count) => {
           if(err) return next(err);
-          res.render("index", {
-            productosIndex,
-            current: page,
-            pages: Math.ceil(count/perPage),
-            buscar: '',
-            isPalindrome: false
+          Product.countDocuments((err, count) => {
+            res.render("index", {
+              productosIndex,
+              current: page,
+              pages: Math.ceil(count/perPage),
+              buscar: '',
+              isPalindrome: false
+            })
           })
-        })
-      })
+      });
   }
 
 
@@ -80,50 +71,62 @@ router.get("/productos", async (req, res) => {
     res.render("productos", {productos})
 });
 
-router.get("/:page", (req, res, next) => {
+router.get("/:page", async (req, res, next) => {
 
   if(req.query.buscar){
+    const palabra = req.query.buscar;
+    console.log(Number(palabra));
+
+    var condition = {};
+    if(isNaN(Number(palabra))){
+      condition = {$or:[ {'brand':{$regex:'.*'+ palabra + '.*'}}, {'description':{$regex:'.*'+ palabra + '.*'}} ]};
+    }
+    else{
+      condition = {'id':palabra};
+    }
+
     const palindromo = isPalindromo(req.query.buscar);
-    console.log('checking: ' + req.query.buscar + ':' + palindromo);
+    console.log('checking: ' + req.query.buscar + '= ' + palindromo);
+
 
     let perPage = 9;
     let page = req.params.page || 1;
-    Product
-      .find({brand:{$regex:'.*'+ req.query.buscar + '.*'}})
+    const result = await Product
+      .find(condition)
       .skip((perPage * page ) - perPage)
       .limit(perPage)
       .exec((err, productosIndex) => {
-        Product.countDocuments((err, count) => {
           if(err) return next(err);
-          res.render("index", {
-            productosIndex,
-            current: page,
-            pages: Math.ceil(count/perPage),
-            buscar: req.query.buscar,
-            isPalindrome: palindromo
+          Product.countDocuments((err, count) => {
+              res.render("index", {
+                productosIndex,
+                current: page,
+                pages: Math.ceil(count/perPage),
+                buscar: palabra,
+                isPalindrome: palindromo
+              })
           })
-        })
-      })
+        });
   }
   else{
     let perPage = 9;
     let page = req.params.page || 1;
-    Product
+    const result = await Product
       .find({})
       .skip((perPage * page ) - perPage)
       .limit(perPage)
       .exec((err, productosIndex) => {
-        Product.countDocuments((err, count) => {
           if(err) return next(err);
-          res.render("index", {
-            productosIndex,
-            current: page,
-            pages: Math.ceil(count/perPage),
-            buscar: '',
-            isPalindrome: false
+          Product.countDocuments((err, count) => {
+            res.render("index", {
+              productosIndex,
+              current: page,
+              pages: Math.ceil(count/perPage),
+              buscar: '',
+              isPalindrome: false
+            })
           })
-        })
-      })
+      });
   }
 
 
@@ -138,5 +141,6 @@ function isPalindromo(str){
 
   return reverseStr === lowRegStr; // "amanaplanacanalpanama" === "amanaplanacanalpanama"? => true
 }
+
 
 module.exports = router;
