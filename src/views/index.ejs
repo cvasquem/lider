@@ -16,7 +16,16 @@
                   <div class="card-body">
                     <h5 class="card-title"><%= producto.brand %></h5>
                     <p class="card-text"><%= producto.description %></p>
-                    <a href="#" class="btn btn-primary">$<%= producto.price %></a>
+                    <% if(isPalindrome){ %>
+                      <div class="btn btn-primary btn-lg">
+                        $<%= Math.ceil(producto.price * 0.5) %>
+
+                      </div><span class="btn btn-danger ml-3">50%</span>
+                      <div class="text-muted"  style="text-decoration:line-through;" >$<%= producto.price %></div>
+                    <% } else{ %>
+                      <div class="btn btn-primary">$<%= producto.price %></div>
+                    <% } %>
+
                   </div>
               </div>
           </div>
