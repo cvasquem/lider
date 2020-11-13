@@ -4,14 +4,13 @@
     <!-- Container here -->
 
     <div class="container">
-      <h1>Productos LIDER</h1>
 
       <!-- listado de productos -->
       <div class="row p-5">
           <% productosIndex.forEach(function(producto){ %>
           <div class="col-md-4">
                 <!-- style="width: 18rem;" -->
-              <div class="card p-4 mx-auto" >
+              <div class="card p-4 mt-4" >
                   <img src="https://<%= producto.image %>" class="card-img-top" alt="..." width="120" height="120">
                   <div class="card-body">
                     <h5 class="card-title"><%= producto.brand %></h5>
@@ -19,7 +18,6 @@
                     <% if(isPalindrome){ %>
                       <div class="btn btn-primary btn-lg">
                         $<%= Math.ceil(producto.price * 0.5) %>
-
                       </div><span class="btn btn-danger ml-3">50%</span>
                       <div class="text-muted"  style="text-decoration:line-through;" >$<%= producto.price %></div>
                     <% } else{ %>
@@ -33,7 +31,7 @@
       </div>
 
       <!-- pagination -->
-      <div class="row">
+      <div class="row mb-5">
         <% if(pages) { %>
           <nav class="mx-auto">
             <ul class="pagination">
@@ -42,7 +40,7 @@
               <% if(current ==1) { %>
                   <li class="page-item"><a class="page-link disabled" href="#">Primera página</a></li>
               <% } else { %>
-                  <li class="page-item"><a class="page-link" href="/1">Primera página</a></li>
+                  <li class="page-item"><a class="page-link" href="/1?buscar=<%=buscar%>">Primera página</a></li>
               <% } %>
 
 
@@ -53,7 +51,7 @@
               <% } %>
               <% for (; i < (Number(current) + 4) && i <= pages ; i++){ %>
                   <% if(i == current) { %>
-                    <li class="page-item"><a class="page-link" href="/#"><%= i %></a></li>
+                    <li class="page-item"><a class="page-link" ><%= i %></a></li>
                   <% }else{ %>
                     <li class="page-item"><a class="page-link" href="/<%= i %>?buscar=<%=buscar%>"><%= i %></a></li>
                   <% } %>
@@ -66,7 +64,7 @@
               <% if(current == pages) { %>
                   <li class="page-item"><a class="page-link disabled" href="#">Última página</a></li>
               <% } else { %>
-                  <li class="page-item"><a class="page-link" href="/<%= pages %>">Última página</a></li>
+                  <li class="page-item"><a class="page-link" href="/<%= pages %>?buscar=<%=buscar%>">Última página</a></li>
               <% } %>
             </ul>
           </nav>
