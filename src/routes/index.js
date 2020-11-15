@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { isPalindromo } = require("../utils");
 
 const Product = require('../models/Product');
 
@@ -165,18 +166,6 @@ router.get("/:page", async (req, res, next) => {
       });
   }
 });
-
-
-
-function isPalindromo(str){
-  var re = /[\W_]/g;
-  var lowRegStr = str.toLowerCase().replace(re, '');
-  var reverseStr = lowRegStr.split('').reverse().join('');
-
-  return reverseStr === lowRegStr;
-}
-
-
 
 
 module.exports = router;
