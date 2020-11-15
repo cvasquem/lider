@@ -3,7 +3,7 @@
   <%- include('partials/_header'); %>
     <!-- Container here -->
 
-    <div class="container">
+    <div class="container" style="min-height: 100%;">
 
       <!-- listado de productos -->
       <div class="row p-5">
@@ -72,7 +72,14 @@
       </div>
       <!-- pagination -->
 
-
+      <!-- no results -->
+      <div class="class="row p-5"">
+        <% if(productosIndex.length == 0) { %>
+          <div class="alert alert-warning" role="alert">
+            No se encontraron resultados :(
+          </div>
+        <% } %>
+      </div>
     </div>
 
 
